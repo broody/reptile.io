@@ -4,14 +4,29 @@ var App = {
 		var vm = new App.ViewModel();
 		ko.applyBindings(vm, document.getElementById('app'));
 
-		App.getEvent(function(data) {
-			vm.imgSrc("./snapshots/" + data.imgName);
-		});
+		vm.getImg();
+		setInterval( function() {
+			vm.getImg();
+		}, 5000);
 	},
 
 	ViewModel: function() {
 		var self = this;
 		self.imgSrc = ko.observable();
+		self.lastImgSrc = false;
+		self.getImg = function() {
+			App.getEvent(function(data) {
+				if(self.lastImgSrc == self.imgSrc()) {
+					return;
+				}
+				self.lastImgSrc = self.imgSrc();
+				var img = new Image;
+				img.onload = function() {
+					self.imgSrc(img.src);
+				};
+				img.src = "./snapshots/" + data.imgName;
+			});
+		};
 	},
 
 	getEvent: function(successCb) {
