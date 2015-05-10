@@ -12,7 +12,7 @@ ifs.capturePic(function(img) {
             console.log(body);
         }
     );
-/*
+    /*
 	request({
         url: "http://gcloud.abovethought.com:5000/event",
         method: "POST",
@@ -25,4 +25,5 @@ ifs.capturePic(function(img) {
         }
     );
 */
+
 });

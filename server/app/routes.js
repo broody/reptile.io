@@ -23,8 +23,8 @@ module.exports = function(app) {
 	});
 
 	app.get('/event', function(req, res) {
-		Events.findOne({}, {}, { sort: {'created_at' : -1 }}, function(err, data) {
-			res.json(data);
+		Events.findOne().sort('-_id').exec(function(err, doc) {
+			res.json(doc);
 		});
 	});
 
