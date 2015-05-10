@@ -16,7 +16,7 @@ var App = {
 		self.lastImgSrc = false;
 		self.getImg = function() {
 			App.getEvent(function(data) {
-				if(self.lastImgSrc == self.imgSrc()) {
+				if(self.lastImgSrc == "./snapshots/" + data.imgName) {
 					return;
 				}
 				self.lastImgSrc = self.imgSrc();
