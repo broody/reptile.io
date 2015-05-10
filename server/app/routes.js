@@ -22,6 +22,12 @@ module.exports = function(app) {
 		res.json({response: "success"});
 	});
 
+	app.get('/event', function(req, res) {
+		Events.findOne({}, {}, { sort: {'created_at' : -1 }}, function(err, data) {
+			res.json(data);
+		});
+	});
+
 	function returnMsg(msg) {
 		var json = {response: msg};
 		return json;

@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var hbs = require('hbs');
 var mongoose = require('mongoose');
 var morgan = require('morgan');
 var request = require('request');
@@ -12,8 +11,6 @@ var config = require('./app/config');
  * Setup
  */
 app.set('port', (process.env.PORT || 5000));
-app.set('view engine', 'html');
-app.engine('html', hbs.__express);
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());

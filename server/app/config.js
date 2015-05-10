@@ -1,4 +1,5 @@
 module.exports = {
-	mongoUrl: "URL of your mongodb"
+	mongoUrl: "mongodb://reptile:reptile@ds049219.mongolab.com:49219/reptile"
 }
+
 

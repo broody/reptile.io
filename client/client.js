@@ -5,8 +5,16 @@ var ifs = require('./app/ifs');
 
 ifs.capturePic(function(img) {
 
+    request({
+        url: "http://gcloud.abovethought.com:5000/event",
+        method: "GET"},
+        function(err, res, body) {
+            console.log(body);
+        }
+    );
+/*
 	request({
-        url: "http://localhost:5000/event",
+        url: "http://gcloud.abovethought.com:5000/event",
         method: "POST",
         json: {
             image: img,
@@ -16,5 +24,5 @@ ifs.capturePic(function(img) {
 			console.log(body);
         }
     );
-
+*/
 });
