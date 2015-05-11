@@ -28,6 +28,12 @@ module.exports = function(app) {
 		});
 	});
 
+	app.get('/events', function(req, res) {
+                Events.find().sort('-_id').limit(30).exec(function(err, doc) {
+                        res.json(doc);
+                });
+        });
+
 	function returnMsg(msg) {
 		var json = {response: msg};
 		return json;
