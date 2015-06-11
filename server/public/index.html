@@ -14,10 +14,9 @@
 		<!--img data-bind="attr: {src: imgSrc}"/-->
 		<div data-role="page">
 			<div data-role="header">
-				<h1>Reptile IO</h1>
+				<h1>Nock Nock!</h1>
 			</div>
 			<div id="content" data-role="content">
-				<!--img id="view-display" data-bind="attr: {src: imgSrc}"/-->
 				<div id="events-container" data-bind="foreach: events">
 					<img data-bind="attr: {src: imgSrc}, visible: show"/>
 					<div data-bind="text: date, visible: show"></div>
@@ -26,6 +25,8 @@
 					<label for="slider-time"><strong>Last X minutes: </strong></label>
 					<input type="range" name="slider-time" id="slider-time" value="30" min="0" max="30" step="1"/>	
 				</div>
+				<br>
+				<p>The UVB light is set to turn off at 10pm and turn back on at 7am. To give the chameleon fresh water, water will be squirted onto the plant every 6 hours.</p>
 			</div>
 		</div>
 	</body>

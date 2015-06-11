@@ -1,8 +1,12 @@
-
 #view-display {
 	width: 100%
 }
 
+#events-container {
+	text-align:center;
+}
+
 #events-container img {
+	max-width: 1024px;
 	width: 100%
 }

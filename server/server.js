@@ -13,7 +13,7 @@ var config = require('./app/config');
 app.set('port', (process.env.PORT || 5000));
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '10mb'}));
 
 require('./app/routes')(app);
 

@@ -58,7 +58,7 @@ var App = {
 			self.event = event;
 			self.imgPath = "./snapshots/" + event.imgName;
 			self.imgSrc = ko.observable();
-			self.date = ko.observable(event.timestamp);
+			self.date = ko.observable("SF Time: " +  event.timestamp);
 			self.show = ko.observable(false);
 			self.loadImg = function() {
 				console.log("loading " + self.imgPath);
