@@ -5,13 +5,6 @@ var imageDir = './public/snapshots/';
 var Events = require('./models/events');
 
 module.exports = function(app) {
-
-	/** Views handler **/
-	app.get('/', function(req, res) {
-		res.render('index');
-	});
-
-	/** API **/
 	app.post('/event', function(req, res) {
 		if(!req.body.image || !req.body.temp) {
 			res.json(returnMsg("no image"));

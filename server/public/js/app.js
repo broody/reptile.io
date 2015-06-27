@@ -13,10 +13,6 @@ var App = {
 		$('#register-form').validator().on('submit', function (e) {
 		  	if (e.isDefaultPrevented()) {
 		  	} else {
-		  		console.log(JSON.stringify({username: $('#regUsername').val(), 
-									email: $('#inputEmail').val(), 
-									password: $('#regPassword').val()}));
-		  		
 		  		$.ajax({
 					url: 'register',
 					type: 'POST',
@@ -38,21 +34,22 @@ var App = {
 		$('#login-form').validator().on('submit', function (e) {
 		  	if (e.isDefaultPrevented()) {
 		  	} else {
+
 		  		$.ajax({
-					url: 'login',
-					type: 'POST',
-					dataType: 'json',
-					contentType: 'application/json;charset=utf-8',
-					data: JSON.stringify({username: $('#loginUsername').val(), 
-									password: $('#loginPassword').val()}),
-					success: function(data) {
-						console.log(data);
-					},
-					error: function(err) {
-						console.error(err);
-					}
-				});
-		  	}
+							url: 'login',
+							type: 'POST',
+							dataType: 'json',
+							contentType: 'application/json;charset=utf-8',
+							data: JSON.stringify({username: $('#loginUsername').val(), 
+											password: $('#loginPassword').val()}),
+							success: function(data) {
+								console.log(data);
+							},
+							error: function(err) {
+								console.error(err);
+							}
+						});
+			  	}
 		  });
 	}
 }

@@ -12,14 +12,15 @@ var config = require('./app/config');
  * Setup
  */
 app.set('port', (process.env.PORT || 5000));
-app.set('view engine', 'html');
+app.set('view engine', 'hbs');
 app.engine('html', hbs.__express);
 app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
 app.use(bodyParser.json({limit: '10mb'}));
+hbs.registerPartials(__dirname + '/views/partials');
 
-require('./app/reg-routes')(app);
-require('./app/event-routes')(app);
+require('./app/routes')(app);
+require('./app/apis')(app);
 
 mongoose.connect(config.mongoUrl, function(err) {
 	if(err) throw err;
