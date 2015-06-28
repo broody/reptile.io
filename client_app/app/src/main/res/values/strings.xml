@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">NockNock</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="pref_key">PREF_NOCKNOCK</string>
+    <string name="pref_is_register">PREF_REG</string>
+    <string name="title_activity_login">NockNock Login</string>
+    <string name="server_url">http://nocknock.io/</string>
+</resources>
