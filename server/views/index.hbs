@@ -24,22 +24,32 @@
 			    <div id="navbar" class="navbar-collapse collapse">
 			      <ul class="nav navbar-nav">
 			      </ul>
+						{{#if loggedin}}
 			      <ul class="nav navbar-nav navbar-right">
-			        <li><a href="" data-toggle="modal" data-target="#loginModal">Login</a></li>
-			        <li><a href="" data-toggle="modal" data-target="#registerModal">Register</a></li>
+			        <li><a href="#" data-bind="click: onLogout">Logout</a></li>
 			      </ul>
+			      {{else}}
+			      <ul class="nav navbar-nav navbar-right">
+			        <li><a href="#" data-toggle="modal" data-target="#loginModal">Login</a></li>
+			        <li><a href="#" data-toggle="modal" data-target="#registerModal">Register</a></li>
+			      </ul>
+			      {{/if}}
 			    </div><!--/.nav-collapse -->
 			  </div><!--/.container-fluid -->
 			</nav>
 
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>Nocknock!</h1>
-        <p>Nocknock is a remote monitoring system to help you manage your reptilian pets when you are not around. With timelapsed photos it will allow you to better understand your pet over a period of time. The automated lighting and watering system will ensure your tank environment are kept consistent. Any anomlies will trigger a notification to your smartphone. </p>
-        <p>
-          <a class="btn btn-lg btn-primary" href="" role="button">View a demo &raquo;</a>
-        </p>
-      </div>
+			{{#if loggedin}}
+      	
+      {{else}}
+	      <!-- Main component for a primary marketing message or call to action -->
+	      <div class="jumbotron">
+	        <h1>Nocknock!</h1>
+	        <p>Nocknock is a remote monitoring system to help you manage your reptilian pets when you are not around. With timelapsed photos it will allow you to better understand your pet over a period of time. The automated lighting and watering system will ensure your tank environment are kept consistent.</p>
+	        <p>
+	          <a class="btn btn-lg btn-primary" href="/demo" role="button">View a demo &raquo;</a>
+	        </p>
+	      </div>
+      {{/if}}
     </div>
 
     <div class="modal fade" id="loginModal">

@@ -27,9 +27,9 @@ module.exports = function(app) {
 		}
 	});
 
-	app.get('/test', function(req, res) {
-		res.send(req.session);
-	})
+	app.get('/demo', function(req, res) {
+		res.render('demo');
+	});
 
 	app.post('/register', function(req, res) {
 		if(!req.body.username || !req.body.password || !req.body.email) {
@@ -51,6 +51,7 @@ module.exports = function(app) {
 		});		
 	});
 
+
 	app.post('/login', function(req, res) {
 		sess = req.session;
 		if(!req.body.username || !req.body.password) {
@@ -65,15 +66,27 @@ module.exports = function(app) {
 				var hash = doc.password;
 				bcrypt.compare(req.body.password, hash, function(err, result) {
 					if(result) {
-						res.json(returnMsg('success'));
+						//res.json(returnMsg('success'));
 						sess.username = req.body.username;
 						console.log(req.session);
+						res.json(returnMsg('success'));
 					} else {
 						res.json(returnMsg('password incorrect'));
 					}
 				});
 			}
 		});
+	});
+
+	app.get('/logout', function(req, res) {
+		sess = req.session;
+		if(sess.username) {
+			req.session.destroy(function(err) {
+				if(err) console.log(err);
+				else res.json(returnMsg('success'));
+			})
+		} 
+		res.json(returnMsg('success'));
 	});
 
 	function returnMsg(msg) {
