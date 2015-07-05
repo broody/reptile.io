@@ -19,10 +19,8 @@ module.exports = function(app) {
 		sess = req.session;
 		console.log(req.session);
 		if(sess.username) {
-			console.log("loggedin");
 			res.render('index', {loggedin: true});
 		} else {
-			console.log("not loggedin");
 			res.render('index');
 		}
 	});
@@ -33,7 +31,7 @@ module.exports = function(app) {
 
 	app.post('/register', function(req, res) {
 		if(!req.body.username || !req.body.password || !req.body.email) {
-			res.json(returnMsg("parameters are not set"));
+			res.json(returnMsg("failure", "parameters are not set"));
 			return;
 		}
 
@@ -43,10 +41,10 @@ module.exports = function(app) {
 					new Users({username: req.body.username, 
 								email: req.body.email, 
 								password: hash}).save();
-					res.json(returnMsg('success'));
+					res.json(returnMsg('success', 'user registered'));
 				});
 			} else {
-				res.json(returnMsg('username taken'));
+				res.json(returnMsg('failure', 'username taken'));
 			}
 		});		
 	});
@@ -54,24 +52,22 @@ module.exports = function(app) {
 
 	app.post('/login', function(req, res) {
 		sess = req.session;
-		if(!req.body.username || !req.body.password) {
-			res.json(returnMsg("parameters are not set"));
+		if(!req.body.username || !req.body.password || !req.body.client) {
+			res.json(returnMsg('failure', 'parameters are not set'));
 			return;
 		}
 
 		Users.findOne({username: req.body.username}).exec(function(err, doc) {
 			if(!doc) {
-				res.json(returnMsg('invalid'));
+				res.json(returnMsg('failure', 'could not find user'));
 			} else {
 				var hash = doc.password;
 				bcrypt.compare(req.body.password, hash, function(err, result) {
 					if(result) {
-						//res.json(returnMsg('success'));
 						sess.username = req.body.username;
-						console.log(req.session);
-						res.json(returnMsg('success'));
+						res.json(returnMsg('success', 'logged in'));
 					} else {
-						res.json(returnMsg('password incorrect'));
+						res.json(returnMsg('failure', 'password incorrect'));
 					}
 				});
 			}
@@ -83,14 +79,14 @@ module.exports = function(app) {
 		if(sess.username) {
 			req.session.destroy(function(err) {
 				if(err) console.log(err);
-				else res.json(returnMsg('success'));
+				else res.json(returnMsg('success', 'logged out'));
+				return;
 			})
 		} 
-		res.json(returnMsg('success'));
 	});
 
-	function returnMsg(msg) {
-		var json = {response: msg};
+	function returnMsg(status, msg) {
+		var json = {status: status, message: msg};
 		return json;
 	}
 }

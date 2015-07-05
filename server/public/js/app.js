@@ -46,10 +46,10 @@ var App = {
 					dataType: 'json',
 					contentType: 'application/json;charset=utf-8',
 					data: JSON.stringify({username: $('#loginUsername').val(), 
-									password: $('#loginPassword').val()}),
+									password: $('#loginPassword').val(),
+									client: "web"}),
 					success: function(data) {
-						console.log(data.response);
-						if(data.response == "success") location.reload(true);
+						if(data.status == "success") location.reload(true);
 					},
 					error: function(err) {
 						console.error(err);
