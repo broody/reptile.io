@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<title>Nocknock</title>
+	</head>
+	<body id="app">
+		<div class="container">
+			{{> nav}}
+			<div class="page-header">
+				<h2>Android <small>Online</small></h2>
+			</div>
+
+			<div class="row">
+				<div class="col-md-4">
+					<h4>Date range</h4>
+					<div class="form-group">
+            <div class='input-group date' id='date-picker-from'>
+              <input type='text' class="form-control" placeHolder="From..."/>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div><br>
+            <div class='input-group date' id='date-picker-to'>
+              <input type='text' class="form-control" placeHolder="To..."/>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+            <br>
+            <button class="btn btn-default">Set Date</button> <button class="btn btn-primary">Get Latest</button>
+          </div>
+				</div>
+				<div class="col-md-8">
+					<h4>Lapse View</h4>
+					<div class="thumbnail">
+						<img src="/snapshots/image_1434050757307.jpg"/>
+						<br>
+						<center><input id="dial" type="text" value="0"/></center>
+					</div>
+				</div>
+			</div>
+
+			<br><br>
+	    <footer class="footer">
+	      <p>&copy; NockNock 2014</p>
+	    </footer>
+		</div>
+
+
+		<script src="js/jquery-2.1.3.js"></script>
+		<script src="js/knockout-3.3.0.js"></script>
+		<script src="js/moment.js"></script>
+		<script src="js/transition.js"></script>
+		<script src="js/collapse.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap-datetimepicker.js"></script>
+		<script src="js/jquery.knob.min.js"></script>
+		<script src="js/device.js"></script>
+	</body>
+</html>

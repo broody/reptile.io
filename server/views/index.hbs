@@ -10,38 +10,37 @@
 	</head>
 	<body id="app">
 		<div class="container">
-			<nav class="navbar navbar-default">
-			  <div class="container-fluid">
-			    <div class="navbar-header">
-			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-			        <span class="sr-only">Toggle navigation</span>
-			        <span class="icon-bar"></span>
-			        <span class="icon-bar"></span>
-			        <span class="icon-bar"></span>
-			      </button>
-			      <a class="navbar-brand" href="#">Nocknock!</a>
-			    </div>
-			    <div id="navbar" class="navbar-collapse collapse">
-			      <ul class="nav navbar-nav">
-			      </ul>
-						{{#if loggedin}}
-			      <ul class="nav navbar-nav navbar-right">
-			        <li><a href="#" data-bind="click: onLogout">Logout</a></li>
-			      </ul>
-			      {{else}}
-			      <ul class="nav navbar-nav navbar-right">
-			        <li><a href="#" data-toggle="modal" data-target="#loginModal">Login</a></li>
-			        <li><a href="#" data-toggle="modal" data-target="#registerModal">Register</a></li>
-			      </ul>
-			      {{/if}}
-			    </div><!--/.nav-collapse -->
-			  </div><!--/.container-fluid -->
-			</nav>
+
+			{{!-- Partial views are cached... why?? --}}
+			{{> nav}}
 
 			{{#if loggedin}}
-      	
+				<div class="page-header">
+					<h2>Overview <small>Tracking {{numDevices}} device(s)</small></h2>
+				</div>
+
+				<div class="row">
+				  <div class="col-sm-6 col-md-4">
+				    <div class="thumbnail">
+				      <a href="device?id=1233"><img src="/snapshots/image_1434050058641.jpg" ></a>
+				      <div class="caption">
+				        <h4>Android Device</h4>
+				        <p>Doodoo's casa</p>
+				      </div>
+				    </div>
+				  </div>
+				  <div class="col-sm-6 col-md-4">
+				    <div class="thumbnail">
+				      <a href="device?id=1234"><img src="/snapshots/image_1434050757307.jpg" ></a>
+				      <div class="caption">
+				        <h4>Android Device</h4>
+				        <p>Doodoo's casa</p>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+
       {{else}}
-	      <!-- Main component for a primary marketing message or call to action -->
 	      <div class="jumbotron">
 	        <h1>Nocknock!</h1>
 	        <p>Nocknock is a remote monitoring system to help you manage your reptilian pets when you are not around. With timelapsed photos it will allow you to better understand your pet over a period of time. The automated lighting and watering system will ensure your tank environment are kept consistent.</p>
@@ -50,68 +49,12 @@
 	        </p>
 	      </div>
       {{/if}}
+
+      <br><br>
+      <footer class="footer">
+        <p>&copy; NockNock 2014</p>
+      </footer>
     </div>
-
-    <div class="modal fade" id="loginModal">
-		  <div class="modal-dialog modal-sm">
-		    <div class="modal-content">
-		    	<form data-toggle="validator" role="form" id="login-form">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title">Login to your account</h4>
-			      </div>
-			      <div class="modal-body">
-			      	<div class="form-group">
-						    <input type="text" class="form-control" id="loginUsername" placeholder="Username" required>
-						  </div>
-			        <div class="input-group">
-					      <input type="password" class="form-control" id="loginPassword" placeholder="Password" required>
-					      <span class="input-group-btn">
-					        <button class="btn btn-default" type="button">Forgot?</button>
-					      </span>
-					    </div><!-- /input-group -->
-					  </div>
-			      <div class="modal-footer">
-			        <button type="submit" class="btn btn-primary">Login</button>
-			      </div>
-			    </form>
-		    </div><!-- /.modal-content -->
-		  </div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-
-		<div class="modal fade" id="registerModal">
-		  <div class="modal-dialog modal-sm">
-		    <div class="modal-content">
-		    	<form data-toggle="validator" role="form" id="register-form">
-			      <div class="modal-header">
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title">Register your account</h4>
-			      </div>
-			      <div class="modal-body">
-			      	<div class="form-group">
-						    <input type="text" class="form-control" id="regUsername" placeholder="Username" required>
-						  </div>
-						  <div class="form-group">
-						    <input type="email" class="form-control" id="inputEmail" placeholder="Email" data-error="Please enter a valid email address" required>
-						    <div class="help-block with-errors"></div>
-						  </div>
-						  <div class="form-group">
-						    <div class="form-group col-lg">
-						      <input type="password" data-minlength="6" class="form-control" id="regPassword" placeholder="Password (6 char minimum)" required>
-						    </div>
-						    <div class="form-group col-lg">
-						      <input type="password" class="form-control" data-match="#regPassword" data-match-error="Password don't match" placeholder="Confirm Password" required>
-						      <div class="help-block with-errors"></div>
-						    </div>
-						  </div>
-					  </div>
-			      <div class="modal-footer">
-			        <button type="submit" class="btn btn-primary" data-loading-text="Loading..." >Register</button>
-			      </div>
-			    </form>
-		    </div><!-- /.modal-content -->
-		  </div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
 
 		<script src="js/jquery-2.1.3.js"></script>
 		<script src="js/knockout-3.3.0.js"></script>
@@ -119,24 +62,4 @@
 		<script src="js/validator.js"></script>
 		<script src="js/app.js"></script>
 	</body>
-
-	<!--body id="app">
-		<div data-role="page">
-			<div data-role="header">
-				<h1>Nock Nock!</h1>
-			</div>
-			<div id="content" data-role="content">
-				<div id="events-container" data-bind="foreach: events">
-					<img data-bind="attr: {src: imgSrc}, visible: show"/>
-					<div data-bind="text: date, visible: show"></div>
-				</div>
-				<div data-role="fieldcontain">
-					<label for="slider-time"><strong>Last X minutes: </strong></label>
-					<input type="range" name="slider-time" id="slider-time" value="30" min="0" max="30" step="1"/>	
-				</div>
-				<br>
-				<p>The UVB light is set to turn off at 10pm and turn back on at 7am. To give the chameleon fresh water, water will be squirted onto the plant every 6 hours.</p>
-			</div>
-		</div>
-	</body-->
 </html>

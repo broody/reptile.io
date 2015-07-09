@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var session = require('express-session');
 var Users = require('./models/users');
+var Events2 = require('./models/events2');
 var ROUNDS = 10;
 
 var sess;
@@ -17,7 +18,6 @@ module.exports = function(app) {
 
 	app.get('/', function(req, res) {
 		sess = req.session;
-		console.log(req.session);
 		if(sess.username) {
 			res.render('index', {loggedin: true});
 		} else {
@@ -27,6 +27,15 @@ module.exports = function(app) {
 
 	app.get('/demo', function(req, res) {
 		res.render('demo');
+	});
+
+	app.get('/device', function(req, res) {
+		sess = req.session;
+		if(sess.username) {
+			res.render('device', {loggedin: true});
+		} else {
+			res.redirect('/');
+		}
 	});
 
 	app.post('/register', function(req, res) {
@@ -47,6 +56,76 @@ module.exports = function(app) {
 				res.json(returnMsg('failure', 'username taken'));
 			}
 		});		
+	});
+
+	app.get('/get-event', function(req, res) {
+		if(!req.query.username || !req.query.mac) {
+			res.json(returnMsg('failure', 'parameters are not set'));
+			return;
+		}
+
+		Users.findOne(	{"username": req.query.username, "devices.mac": req.query.mac} ).limit({"devices.events" : 5}).exec(function(err, doc) {
+			if(doc) {
+				console.log(doc.devices[0].events);
+				res.json(returnMsg('success', doc.devices[0].events));
+			} else {
+				res.json(returnMsg('failure', 'could not find user or device'));
+			}
+		});
+	});
+
+	app.post('/register-event', function(req, res) {
+		if(!req.body.username || !req.body.mac || !req.body.event) {
+			res.json(returnMsg('failure', 'parameters are not set'));
+			return;
+		}
+
+		Users.findOne(	{"username": req.body.username, "devices.mac": req.body.mac})
+		.exec(function(err, doc) {
+			if(doc) {
+				new Events2({
+							mac_id: doc.devices[0]._id,
+							type: req.body.event.type,
+							value: req.body.event.value
+							}).save();
+				res.json(returnMsg('success', 'event saved'));
+			} else {
+				res.json(returnMsg('failure', 'could not find user or device'));
+			}
+		});
+	});
+
+	app.post('/register-device', function(req, res) {
+		if(!req.body.username || !req.body.password || !req.body.mac || !req.body.name) {
+			res.json(returnMsg('failure', 'parameters are not set'));
+			return;
+		}
+
+		Users.findOne({username: req.body.username}, {devices: false}).exec(function(err, doc) {
+			if(doc) {
+				var hash = doc.password;
+				bcrypt.compare(req.body.password, hash, function(err, result) {
+					if(result) {
+						doc.devices.push({
+							mac: req.body.mac,
+							name: req.body.name
+						});
+
+						doc.save(function(err) {
+							if(err) {
+								res.json(returnMsg('failure', err));
+							} else {
+								res.json(returnMsg('success', 'device registered'));
+							}
+						});
+					} else {
+						res.json(returnMsg('failure', 'password incorrect'));
+					}
+				});
+			} else {
+				res.json(returnMsg('failure', 'could not find user to register device'));
+			}
+		});
 	});
 
 
