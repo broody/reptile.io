@@ -4,6 +4,7 @@ var router = express.Router();
 var session = require('express-session');
 var Users = require('./models/users');
 var Events2 = require('./models/events2');
+var fs = require('fs');
 var ROUNDS = 10;
 
 var sess;
@@ -43,14 +44,16 @@ module.exports = function(app) {
 			res.json(returnMsg("failure", "parameters are not set"));
 			return;
 		}
-
 		Users.findOne({username: req.body.username}).exec(function(err, doc) {
 			if(!doc) {
 				bcrypt.hash(req.body.password, ROUNDS, function(err, hash) {
-					new Users({username: req.body.username, 
-								email: req.body.email, 
-								password: hash}).save();
-					res.json(returnMsg('success', 'user registered'));
+					fs.mkdir('./public/uploads/' + req.body.username, function(err) {
+						if(err) return res.json(returnMsg('failure', err));
+						new Users({username: req.body.username, 
+									email: req.body.email, 
+									password: hash}).save();
+						res.json(returnMsg('success', 'user registered'));
+					});
 				});
 			} else {
 				res.json(returnMsg('failure', 'username taken'));
@@ -63,6 +66,8 @@ module.exports = function(app) {
 			res.json(returnMsg('failure', 'parameters are not set'));
 			return;
 		}
+
+		req.query.mac = req.query.mac.toUpperCase();
 
 		Users.findOne( {"username" : req.query.username, "devices.mac" : req.query.mac })
 		.exec(function(err, doc) {
@@ -84,14 +89,33 @@ module.exports = function(app) {
 			return;
 		}
 
+		req.body.mac = req.body.mac.toUpperCase();
+
 		Users.findOne(	{"username": req.body.username, "devices.mac": req.body.mac})
 		.exec(function(err, doc) {
 			if(doc) {
-				new Events2({
+				
+				if(req.body.event.type == "image") {
+					var imageDir = './public/uploads/' + req.body.username + '/' + req.body.mac + '/';
+					var img = new Buffer(req.body.event.value, 'base64');
+					var date = new Date();
+					var filename = "image_" + date.getTime()+ ".jpg";
+					fs.writeFile(imageDir + filename, img, function(err) {
+						if(err) return console.error(err);
+						new Events2({
 							mac_id: doc.devices[0]._id,
 							type: req.body.event.type,
-							value: req.body.event.value
-							}).save();
+							value: filename
+						}).save();
+					});
+				} else {
+					new Events2({
+							mac_id: doc.devices[0]._id,
+							type: req.body.event.type,
+							value: req.body.event.value 
+						}).save();
+				}
+
 				res.json(returnMsg('success', 'event saved'));
 			} else {
 				res.json(returnMsg('failure', 'could not find user or device'));
@@ -105,6 +129,8 @@ module.exports = function(app) {
 			return;
 		}
 
+		req.body.mac = req.body.mac.toUpperCase();
+		console.log(req.body.mac);
 		Users.findOne({username: req.body.username}, {devices: false}).exec(function(err, doc) {
 			if(doc) {
 				var hash = doc.password;
@@ -119,7 +145,10 @@ module.exports = function(app) {
 							if(err) {
 								res.json(returnMsg('failure', err));
 							} else {
-								res.json(returnMsg('success', 'device registered'));
+								fs.mkdir('./public/uploads/' + req.body.username + '/' + req.body.mac, function(err) {
+									if(err) return res.json(returnMsg('failure', err));
+									res.json(returnMsg('success', 'device registered'));
+								});
 							}
 						});
 					} else {

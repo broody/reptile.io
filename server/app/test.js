@@ -1,4 +1,21 @@
 var request = require('request');
+var fs = require('fs');
+fs.readFile("./orig.jpg", function(err, data) {
+
+	request({
+		uri: 'http://localhost:5000/register-event',
+		method: 'POST',
+		json: {
+			username: 'broody',
+			mac: '00:0f:60:04:e0:e3',
+			event: {type: 'image', value: data.toString('base64')}
+		}
+	}, function(err, res, body) {
+		if(err) return console.error(err);
+		console.log(body);
+	});
+});
+
 
 var registerDev = {
 	uri: 'http://localhost:5000/register-device',
@@ -6,7 +23,7 @@ var registerDev = {
 	json: {
 		username: 'broody',
 		password: '791825',
-		mac: '11:22:33:44:55:66',
+		mac: '00:0f:60:04:e0:e3',
 		name: 'home'
 	}
 }
@@ -26,8 +43,8 @@ var registerEvent = {
 	method: 'POST',
 	json: {
 		username: 'broody',
-		mac: '11:22:33:44:55:66',
-		event: {type: 'image', value: 'image.jpg'}
+		mac: '00:0f:60:04:e0:e3',
+		event: {type: 'image', value: 'test'}
 	}
 }
 
@@ -36,7 +53,7 @@ var getEvent = {
 	method: 'GET'
 }
 
-request(getEvent, function(err, res, body) {
-	if(err) return console.error(err);
-	console.log(body);
-});
+
+
+
+
