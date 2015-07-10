@@ -36,7 +36,7 @@ var getEvent = {
 	method: 'GET'
 }
 
-request(registerEvent, function(err, res, body) {
+request(getEvent, function(err, res, body) {
 	if(err) return console.error(err);
 	console.log(body);
 });

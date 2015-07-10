@@ -64,10 +64,14 @@ module.exports = function(app) {
 			return;
 		}
 
-		Users.findOne(	{"username": req.query.username, "devices.mac": req.query.mac} ).limit({"devices.events" : 5}).exec(function(err, doc) {
+		Users.findOne( {"username" : req.query.username, "devices.mac" : req.query.mac })
+		.exec(function(err, doc) {
 			if(doc) {
-				console.log(doc.devices[0].events);
-				res.json(returnMsg('success', doc.devices[0].events));
+				Events2.find({"mac_id": doc.devices[0]._id}).sort("creation")
+				.limit(30)
+				.exec(function(err, doc) {
+					res.json(returnMsg('success', doc));
+				});
 			} else {
 				res.json(returnMsg('failure', 'could not find user or device'));
 			}
