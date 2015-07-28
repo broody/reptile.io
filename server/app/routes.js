@@ -5,6 +5,7 @@ var session = require('express-session');
 var Users = require('./models/users');
 var Events2 = require('./models/events2');
 var fs = require('fs');
+var moment = require('moment');
 var ROUNDS = 10;
 
 var sess;
@@ -20,7 +21,19 @@ module.exports = function(app) {
 	app.get('/', function(req, res) {
 		sess = req.session;
 		if(sess.username) {
-			res.render('index', {loggedin: true});
+			Users.findOne({username: sess.username}).exec(function(err, doc) {
+				if(!doc) {
+					req.session.destroy(function(err) {
+						if(err) console.log(err);
+						else res.render('index');
+						return;
+					});
+				} else {
+					res.render('index', {
+						loggedin: true, 
+						devices: doc.devices});
+				}
+			});
 		} else {
 			res.render('index');
 		}
@@ -33,7 +46,11 @@ module.exports = function(app) {
 	app.get('/device', function(req, res) {
 		sess = req.session;
 		if(sess.username) {
-			res.render('device', {loggedin: true});
+			console.log(req.query.mac);
+			res.render('device', {
+				loggedin: true, 
+				mac: req.query.mac,
+				username: sess.username});
 		} else {
 			res.redirect('/');
 		}
@@ -62,25 +79,43 @@ module.exports = function(app) {
 	});
 
 	app.get('/get-event', function(req, res) {
-		if(!req.query.username || !req.query.mac) {
-			res.json(returnMsg('failure', 'parameters are not set'));
-			return;
-		}
-
-		req.query.mac = req.query.mac.toUpperCase();
-
-		Users.findOne( {"username" : req.query.username, "devices.mac" : req.query.mac })
-		.exec(function(err, doc) {
-			if(doc) {
-				Events2.find({"mac_id": doc.devices[0]._id}).sort("creation")
-				.limit(30)
-				.exec(function(err, doc) {
-					res.json(returnMsg('success', doc));
-				});
-			} else {
-				res.json(returnMsg('failure', 'could not find user or device'));
+		//sess = req.session;
+		//if(sess.username) {
+			if(!req.query.mac) {
+				res.json(returnMsg('failure', 'parameters are not set'));
+				return;
 			}
-		});
+			var date = moment();
+
+			if(!req.query.date) {
+				req.query.date = date.format();
+			}
+
+			req.query.mac = req.query.mac.toUpperCase();
+			
+			Users.findOne( {"username" : "broody", "devices.mac" : req.query.mac })
+			.exec(function(err, doc) {
+				if(doc) {
+					Events2.find({
+						"mac": req.query.mac,
+						"creation" : {
+							$lte : req.query.date,
+						},
+						"minute" : {
+							$mod : [req.query.interval, 0]
+						}
+					}).sort("-creation")
+					.limit(60)
+					.exec(function(err, doc) {
+						res.json(returnMsg('success', doc));
+					});
+				} else {
+					res.json(returnMsg('failure', 'could not find user or device'));
+				}
+			});
+		//} else {
+		//	res.redirect('/');
+		//}
 	});
 
 	app.post('/register-event', function(req, res) {
@@ -93,8 +128,8 @@ module.exports = function(app) {
 
 		Users.findOne(	{"username": req.body.username, "devices.mac": req.body.mac})
 		.exec(function(err, doc) {
+			if(err) return console.error(err);
 			if(doc) {
-				
 				if(req.body.event.type == "image") {
 					var imageDir = './public/uploads/' + req.body.username + '/' + req.body.mac + '/';
 					var img = new Buffer(req.body.event.value, 'base64');
@@ -102,17 +137,38 @@ module.exports = function(app) {
 					var filename = "image_" + date.getTime()+ ".jpg";
 					fs.writeFile(imageDir + filename, img, function(err) {
 						if(err) return console.error(err);
-						new Events2({
-							mac_id: doc.devices[0]._id,
+
+						var date = moment();
+
+						var event = {
+							mac: req.body.mac,
 							type: req.body.event.type,
-							value: filename
-						}).save();
+							value: filename,
+							creation: date.format(),
+							dayOfYear: date.dayOfYear(),
+							hour: date.get('hour'),
+							minute: date.get('minute'),
+							second: date.get('second')
+						};
+
+						new Events2(event).save(function(err) {
+							if(err) return console.error(err);
+							for(var i=0; i<doc.devices.length; i++) {
+								if(doc.devices[i].mac == req.body.mac) {
+									doc.devices[i].latestImage = './uploads/'+req.body.username+'/'+req.body.mac+'/'+filename;
+									doc.save();
+									break;
+								}
+							}
+						});
+
+						
 					});
 				} else {
 					new Events2({
-							mac_id: doc.devices[0]._id,
+							mac: req.body.mac,
 							type: req.body.event.type,
-							value: req.body.event.value 
+							value: req.body.event.value
 						}).save();
 				}
 
@@ -130,7 +186,6 @@ module.exports = function(app) {
 		}
 
 		req.body.mac = req.body.mac.toUpperCase();
-		console.log(req.body.mac);
 		Users.findOne({username: req.body.username}, {devices: false}).exec(function(err, doc) {
 			if(doc) {
 				var hash = doc.password;

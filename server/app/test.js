@@ -1,6 +1,6 @@
 var request = require('request');
 var fs = require('fs');
-fs.readFile("./orig.jpg", function(err, data) {
+/*fs.readFile("./orig.jpg", function(err, data) {
 
 	request({
 		uri: 'http://localhost:5000/register-event',
@@ -14,7 +14,8 @@ fs.readFile("./orig.jpg", function(err, data) {
 		if(err) return console.error(err);
 		console.log(body);
 	});
-});
+});*/
+
 
 
 var registerDev = {
@@ -24,6 +25,28 @@ var registerDev = {
 		username: 'broody',
 		password: '791825',
 		mac: '00:0f:60:04:e0:e3',
+		name: 'home'
+	}
+}
+
+var registerDev2 = {
+	uri: 'http://localhost:5000/register-device',
+	method: 'POST',
+	json: {
+		username: 'broody',
+		password: '791825',
+		mac: 'C0:EE:FB:33:65:8A',
+		name: 'home'
+	}
+}
+
+var registerDev3 = {
+	uri: 'http://localhost:5000/register-device',
+	method: 'POST',
+	json: {
+		username: 'broody',
+		password: '791825',
+		mac: '8C:3A:E3:3F:9B:62',
 		name: 'home'
 	}
 }
@@ -49,11 +72,13 @@ var registerEvent = {
 }
 
 var getEvent = {
-	uri: 'http://localhost:5000/get-event?username=broody&mac=11:22:33:44:55:66',
+	uri: 'http://localhost:5000/get-event?mac=8C:3A:E3:3F:9B:62',
 	method: 'GET'
 }
 
 
-
-
+request(getEvent, function(err, res, body) {
+		if(err) return console.error(err);
+		console.log(body);
+	});
 

@@ -8,7 +8,7 @@
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<title>Nocknock</title>
 	</head>
-	<body id="app">
+	<body>
 		<div class="container">
 
 			{{!-- Partial views are cached... why?? --}}
@@ -16,30 +16,22 @@
 
 			{{#if loggedin}}
 				<div class="page-header">
-					<h2>Overview <small>Tracking {{numDevices}} device(s)</small></h2>
+					<h2>Overview <small>Tracking {{devices.length}} device(s)</small></h2>
 				</div>
 
 				<div class="row">
-				  <div class="col-sm-6 col-md-4">
-				    <div class="thumbnail">
-				      <a href="device?id=1233"><img src="/snapshots/image_1434050058641.jpg" ></a>
-				      <div class="caption">
-				        <h4>Android Device</h4>
-				        <p>Doodoo's casa</p>
-				      </div>
-				    </div>
-				  </div>
-				  <div class="col-sm-6 col-md-4">
-				    <div class="thumbnail">
-				      <a href="device?id=1234"><img src="/snapshots/image_1434050757307.jpg" ></a>
-				      <div class="caption">
-				        <h4>Android Device</h4>
-				        <p>Doodoo's casa</p>
-				      </div>
-				    </div>
-				  </div>
+				{{#each devices}}
+					  <div class="col-sm-6 col-md-4">
+					    <div class="thumbnail">
+					      <a href="device?mac={{mac}}"><img src="{{latestImage}}" ></a>
+					      <div class="caption">
+					        <h4>{{name}}</h4>
+					      </div>
+					    </div>
+					  </div>
+				{{/each}}
 				</div>
-
+				
       {{else}}
 	      <div class="jumbotron">
 	        <h1>Nocknock!</h1>
@@ -60,6 +52,6 @@
 		<script src="js/knockout-3.3.0.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/validator.js"></script>
-		<script src="js/app.js"></script>
+		<script src="js/nav.js"></script>
 	</body>
 </html>

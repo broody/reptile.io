@@ -1,8 +1,8 @@
-var App = {
+var Nav = {
 	init: function() {
-		var vm = new App.ViewModel();
-		ko.applyBindings(vm, document.getElementById('app'));
-		App.jQueryInit();
+		var vm = new Nav.ViewModel();
+		ko.applyBindings(vm, document.getElementById('nav'));
+		Nav.jQueryInit();
 	},
 
 	ViewModel: function() {
@@ -59,4 +59,4 @@ var App = {
 	}
 }
 
-$(document).ready(App.init);
+$(document).ready(Nav.init);

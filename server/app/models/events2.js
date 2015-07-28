@@ -1,10 +1,14 @@
 var mongoose = require('mongoose');
 
 var Events2 = {
-	mac_id		: {type: String, index: true},
-	creation	: {type: Date, default: Date.now, index: true},
+	mac			: {type: String, index: true},
 	type		: {type: String, index: true},
-	value		: String
+	value		: String,
+	creation	: {type: Date, default: Date.now, index: true},
+	dayOfYear	: {type: Number},
+	hour		: {type: Number},
+	minute		: {type: Number},
+	second		: {type: Number}
 }
 
 module.exports = mongoose.model('Events2', Events2);
