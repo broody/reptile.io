@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="css/nouislider.min.css">
+		<title>Nocknock</title>
+	</head>
+	<body>
+		<div class="container">
+			{{> nav}}
+
+			<div id="device-view">
+				<div class="row">
+					<div class="col-sm-4">
+						<div id="current-time" data-bind="text: currentTime"></div>
+						<!--div id="current-date" data-bind="text: currentDate"></div-->
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="thumbnail" data-bind="foreach: events">
+							<img data-bind="attr: {'src': imageSrc}, visible: show"/>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-2">
+ 						<div class="input-group">
+				      <span class="input-group-btn">
+				        <button class="btn btn-default" type="button" data-bind="click: onIntervalBtn">Interval</button>
+				      </span>
+				      <input type="text" data-bind="value: interval, valueUpdate: 'afterkeydown'" class="form-control" placeholder="1 minute">
+				    </div>
+					</div>
+					<div class="col-sm-10">
+						<br>
+						<div id="slider"></div>
+					</div>
+				</div>
+							
+			<br><br>
+	    <footer class="footer">
+	      <p>&copy; NockNock 2014</p>
+	    </footer>
+		</div>
+
+		<script type="text/javascript">
+			MAC_ADDR = "{{mac}}";
+			USERNAME = "{{username}}";
+		</script>
+
+		<script src="js/jquery-2.1.3.js"></script>
+		<script src="js/knockout-3.3.0.js"></script>
+		<script src="js/nouislider.min.js"></script>
+		<script src="js/moment.min.js"></script>
+		<script src="js/transition.js"></script>
+		<script src="js/collapse.js"></script>
+		<script src="js/validator.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap-datetimepicker.js"></script>
+		<script src="js/jquery.knob.min.js"></script>
+		<script src="js/utils.js"></script>
+		<script src="js/nav.js"></script>
+		<script src="js/device.js"></script>
+	</body>
+</html>
