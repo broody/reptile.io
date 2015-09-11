@@ -5,8 +5,8 @@ android {
     buildToolsVersion "23.0.0 rc2"
 
     defaultConfig {
-        applicationId "io.nocknock.clientapp"
-        minSdkVersion 15
+        applicationId "io.nocknock.client"
+        minSdkVersion 14
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
